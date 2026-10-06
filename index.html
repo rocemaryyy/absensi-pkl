@@ -1,181 +1,272 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Absensi PKL</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-    }
+<title>Absensi PKL</title>
 
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
+<style>
 
-    h1 {
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  padding: 20px;
+}
 
-    input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 16px;
-    }
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+}
 
-    video {
-      width: 100%;
-      margin-top: 20px;
-      border-radius: 12px;
-      background: black;
-      display: block;
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
 
-      /* Tampilan selfie */
-      transform: scaleX(-1);
-    }
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+}
 
-    #btnKamera {
-      background: #2563eb;
-      color: white;
-    }
+.camera-box {
+  margin-top: 20px;
+  width: 100%;
+  background: #111;
+  border-radius: 15px;
+  overflow: hidden;
+}
 
-    #btnFoto {
-      background: #16a34a;
-      color: white;
-    }
+video {
+  width: 100%;
+  display: block;
+}
 
-    button:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
+canvas {
+  display: none;
+}
 
-    #status {
-      margin-top: 15px;
-      padding: 12px;
-      background: #f8fafc;
-      border-radius: 8px;
-      line-height: 1.6;
-      font-size: 14px;
-    }
+button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    canvas {
-      display: none;
-    }
-  </style>
+.btn-camera {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-foto {
+  background: #16a34a;
+  color: white;
+}
+
+.btn-absen {
+  background: #7c3aed;
+  color: white;
+}
+
+button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 10px;
+  line-height: 1.8;
+}
+
+.success {
+  color: #15803d;
+  font-weight: bold;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+.preview {
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 12px;
+  display: none;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <h1>📋 Absensi PKL</h1>
+<h1>📋 Absensi PKL</h1>
 
-    <label for="nama">Nama</label>
-    <input
-      type="text"
-      id="nama"
-      placeholder="Masukkan nama lengkap"
-    >
 
-    <label for="kelas">Kelas</label>
-    <input
-      type="text"
-      id="kelas"
-      placeholder="Contoh: XII RPL 1"
-    >
+<label>Nama Lengkap</label>
 
-    <video
-      id="video"
-      autoplay
-      playsinline
-    ></video>
+<input
+  type="text"
+  id="nama"
+  placeholder="Masukkan nama lengkap"
+>
 
-    <button id="btnKamera" onclick="bukaKamera()">
-      📷 Buka Kamera
-    </button>
 
-    <button
-      id="btnFoto"
-      onclick="ambilFoto()"
-      disabled
-    >
-      📸 Ambil Foto & Absen
-    </button>
+<label>Kelas</label>
 
-    <canvas id="canvas"></canvas>
+<input
+  type="text"
+  id="kelas"
+  placeholder="Contoh: XII RPL 1"
+>
 
-    <div id="status">
-      <b>Status:</b><br>
-      Kamera belum dibuka.
-    </div>
 
-  </div>
+<div class="camera-box">
+
+<video
+  id="video"
+  autoplay
+  playsinline
+></video>
+
+</div>
+
+
+<button
+  class="btn-camera"
+  onclick="bukaKamera()"
+>
+📷 Buka Kamera
+</button>
+
+
+<button
+  class="btn-foto"
+  onclick="ambilFoto()"
+  disabled
+  id="btnFoto"
+>
+🤳 Ambil Foto
+</button>
+
+
+<canvas id="canvas"></canvas>
+
+<img
+  id="preview"
+  class="preview"
+>
+
+
+<div class="status">
+
+<strong>Status:</strong>
+
+<div id="statusKamera">
+⏳ Kamera belum aktif
+</div>
+
+<div id="statusLokasi">
+📍 Mencari lokasi...
+</div>
+
+</div>
+
+
+<button
+  class="btn-absen"
+  onclick="kirimAbsensi()"
+  id="btnAbsen"
+  disabled
+>
+✅ KIRIM ABSENSI
+</button>
+
+
+<div id="hasil"></div>
+
+</div>
 
 
 <script>
 
-  // ==========================================
-  // VARIABEL
-  // ==========================================
 
-  let stream = null;
+// ==========================================
+// URL APPS SCRIPT
+// ==========================================
 
-  let latitude = null;
-  let longitude = null;
+const APPS_SCRIPT_URL =
+"https://script.google.com/a/macros/sma.belajar.id/s/AKfycby2rybHLgM_UVbJ0RzKmTxWPbcaZ3CJKDplBTmBTnk/exec";
 
 
-  // ==========================================
-  // BUKA KAMERA
-  // ==========================================
+// ==========================================
+// VARIABEL
+// ==========================================
 
-  async function bukaKamera() {
+let stream = null;
 
-    const status = document.getElementById("status");
-    const video = document.getElementById("video");
-    const btnFoto = document.getElementById("btnFoto");
+let fotoBase64 = null;
 
-    try {
+let latitude = null;
 
-      status.innerHTML =
-        "<b>Status:</b><br>📷 Meminta izin kamera...";
+let longitude = null;
 
-      stream = await navigator.mediaDevices.getUserMedia({
+
+// ==========================================
+// SAAT HALAMAN DIBUKA
+// ==========================================
+
+window.onload = function() {
+
+  ambilLokasi();
+
+};
+
+
+// ==========================================
+// BUKA KAMERA
+// ==========================================
+
+async function bukaKamera() {
+
+  try {
+
+    stream =
+      await navigator.mediaDevices.getUserMedia({
 
         video: {
           facingMode: "user"
@@ -186,248 +277,397 @@
       });
 
 
-      video.srcObject = stream;
-
-
-      status.innerHTML =
-        "<b>Status:</b><br>" +
-        "✅ Kamera berhasil dibuka.<br>" +
-        "📍 Sedang mengambil lokasi...";
-
-
-      btnFoto.disabled = false;
-
-
-      // Setelah kamera berhasil,
-      // langsung minta lokasi
-
-      ambilLokasi();
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      status.innerHTML =
-        "<b>Status:</b><br>" +
-        "❌ Kamera tidak bisa dibuka.<br><br>" +
-        "Pastikan izin kamera diberikan kepada browser.";
-
-    }
-
-  }
-
-
-  // ==========================================
-  // AMBIL GPS OTOMATIS
-  // ==========================================
-
-  function ambilLokasi() {
-
-    const status = document.getElementById("status");
-
-    if (!navigator.geolocation) {
-
-      status.innerHTML =
-        "<b>Status:</b><br>" +
-        "❌ Browser tidak mendukung GPS.";
-
-      return;
-
-    }
-
-
-    navigator.geolocation.getCurrentPosition(
-
-      function(position) {
-
-        latitude = position.coords.latitude;
-
-        longitude = position.coords.longitude;
-
-
-        console.log("Latitude:", latitude);
-
-        console.log("Longitude:", longitude);
-
-
-        status.innerHTML =
-          "<b>Status:</b><br>" +
-          "✅ Kamera aktif<br>" +
-          "📍 Lokasi berhasil didapat";
-
-
-      },
-
-
-      function(error) {
-
-        console.error(error);
-
-
-        status.innerHTML =
-          "<b>Status:</b><br>" +
-          "⚠️ Kamera aktif.<br>" +
-          "❌ Lokasi belum diizinkan.<br><br>" +
-          "Silakan izinkan akses lokasi.";
-
-      },
-
-
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0
-      }
-
-    );
-
-  }
-
-
-  // ==========================================
-  // AMBIL FOTO
-  // ==========================================
-
-  function ambilFoto() {
-
-    const nama =
-      document.getElementById("nama").value.trim();
-
-    const kelas =
-      document.getElementById("kelas").value.trim();
-
-
-    // Cek nama
-
-    if (!nama) {
-
-      alert("Nama belum diisi.");
-
-      return;
-
-    }
-
-
-    // Cek kelas
-
-    if (!kelas) {
-
-      alert("Kelas belum diisi.");
-
-      return;
-
-    }
-
-
-    // Cek kamera
-
-    if (!stream) {
-
-      alert("Kamera belum dibuka.");
-
-      return;
-
-    }
-
-
-    // Cek lokasi
-
-    if (latitude === null || longitude === null) {
-
-      alert(
-        "Lokasi belum berhasil didapat.\n\n" +
-        "Pastikan izin lokasi sudah diberikan."
-      );
-
-      return;
-
-    }
-
-
     const video =
       document.getElementById("video");
 
-    const canvas =
-      document.getElementById("canvas");
+
+    video.srcObject = stream;
 
 
-    // Ukuran foto mengikuti kamera
-
-    canvas.width = video.videoWidth;
-
-    canvas.height = video.videoHeight;
+    document.getElementById("statusKamera")
+      .innerHTML =
+      "✅ Kamera aktif";
 
 
-    const context =
-      canvas.getContext("2d");
+    document.getElementById("btnFoto")
+      .disabled = false;
 
 
-    // Balik foto supaya seperti selfie
+  }
 
-    context.translate(canvas.width, 0);
+  catch (error) {
 
-    context.scale(-1, 1);
-
-
-    context.drawImage(
-
-      video,
-
-      0,
-      0,
-
-      canvas.width,
-      canvas.height
-
-    );
+    console.error(error);
 
 
-    // Ubah foto menjadi data
-
-    const foto =
-      canvas.toDataURL(
-        "image/jpeg",
-        0.8
-      );
-
-
-    // ==========================================
-    // HASIL SEMENTARA
-    // ==========================================
-
-    console.log("================================");
-
-    console.log("NAMA:", nama);
-
-    console.log("KELAS:", kelas);
-
-    console.log("LATITUDE:", latitude);
-
-    console.log("LONGITUDE:", longitude);
-
-    console.log("FOTO:", foto);
-
-    console.log("================================");
+    document.getElementById("statusKamera")
+      .innerHTML =
+      "❌ Kamera tidak bisa dibuka";
 
 
     alert(
-
-      "✅ Foto berhasil diambil!\n\n" +
-
-      "Nama: " + nama + "\n" +
-
-      "Kelas: " + kelas + "\n\n" +
-
-      "Latitude: " + latitude + "\n" +
-
-      "Longitude: " + longitude
-
+      "Kamera tidak bisa digunakan. Pastikan izin kamera sudah diberikan."
     );
 
   }
+
+}
+
+
+// ==========================================
+// AMBIL FOTO
+// ==========================================
+
+function ambilFoto() {
+
+  const video =
+    document.getElementById("video");
+
+
+  const canvas =
+    document.getElementById("canvas");
+
+
+  const preview =
+    document.getElementById("preview");
+
+
+  canvas.width =
+    video.videoWidth;
+
+
+  canvas.height =
+    video.videoHeight;
+
+
+  const ctx =
+    canvas.getContext("2d");
+
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  fotoBase64 =
+    canvas.toDataURL(
+      "image/jpeg",
+      0.8
+    );
+
+
+  preview.src =
+    fotoBase64;
+
+
+  preview.style.display =
+    "block";
+
+
+  document.getElementById("btnAbsen")
+    .disabled = false;
+
+
+  alert("Foto berhasil diambil!");
+
+
+}
+
+
+// ==========================================
+// AMBIL LOKASI OTOMATIS
+// ==========================================
+
+function ambilLokasi() {
+
+  if (!navigator.geolocation) {
+
+    document.getElementById("statusLokasi")
+      .innerHTML =
+      "❌ Browser tidak mendukung GPS";
+
+    return;
+
+  }
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(position) {
+
+      latitude =
+        position.coords.latitude;
+
+
+      longitude =
+        position.coords.longitude;
+
+
+      document.getElementById("statusLokasi")
+        .innerHTML =
+        "📍 Lokasi berhasil didapat";
+
+
+    },
+
+
+    function(error) {
+
+      console.error(error);
+
+
+      document.getElementById("statusLokasi")
+        .innerHTML =
+        "❌ Lokasi tidak bisa didapat";
+
+
+    },
+
+    {
+
+      enableHighAccuracy: true,
+
+      timeout: 10000,
+
+      maximumAge: 0
+
+    }
+
+  );
+
+}
+
+
+// ==========================================
+// KIRIM ABSENSI
+// ==========================================
+
+async function kirimAbsensi() {
+
+
+  const nama =
+    document.getElementById("nama")
+      .value.trim();
+
+
+  const kelas =
+    document.getElementById("kelas")
+      .value.trim();
+
+
+  // ----------------------------------------
+  // Validasi
+  // ----------------------------------------
+
+  if (!nama) {
+
+    alert("Nama belum diisi!");
+
+    return;
+
+  }
+
+
+  if (!kelas) {
+
+    alert("Kelas belum diisi!");
+
+    return;
+
+  }
+
+
+  if (!fotoBase64) {
+
+    alert("Silakan ambil foto terlebih dahulu!");
+
+    return;
+
+  }
+
+
+  if (!latitude || !longitude) {
+
+    alert("Lokasi belum tersedia!");
+
+    return;
+
+  }
+
+
+  // ----------------------------------------
+  // Tombol loading
+  // ----------------------------------------
+
+  const btn =
+    document.getElementById("btnAbsen");
+
+
+  btn.disabled = true;
+
+  btn.innerText =
+    "⏳ Mengirim absensi...";
+
+
+  // ----------------------------------------
+  // Data yang dikirim
+  // ----------------------------------------
+
+  const data = {
+
+    nama: nama,
+
+    kelas: kelas,
+
+    latitude: latitude,
+
+    longitude: longitude,
+
+    foto: fotoBase64
+
+  };
+
+
+  try {
+
+
+    const response =
+      await fetch(
+
+        APPS_SCRIPT_URL,
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "text/plain;charset=utf-8"
+
+          },
+
+          body:
+            JSON.stringify(data)
+
+        }
+
+      );
+
+
+    const hasil =
+      await response.json();
+
+
+    console.log(hasil);
+
+
+    // --------------------------------------
+    // Jika berhasil
+    // --------------------------------------
+
+    if (
+      hasil.status === "success"
+    ) {
+
+
+      document.getElementById("hasil")
+        .innerHTML = `
+
+          <div class="status success">
+
+            ✅ ABSENSI BERHASIL!
+
+            <br><br>
+
+            Nama: ${nama}
+
+            <br>
+
+            Kelas: ${kelas}
+
+            <br>
+
+            📍 Lokasi berhasil disimpan
+
+            <br>
+
+            📷 Foto berhasil disimpan
+
+          </div>
+
+        `;
+
+
+      btn.innerText =
+        "✅ ABSENSI TERKIRIM";
+
+
+      // Matikan kamera
+
+      if (stream) {
+
+        stream
+          .getTracks()
+          .forEach(
+            track => track.stop()
+          );
+
+      }
+
+
+    }
+
+    else {
+
+      throw new Error(
+        hasil.message ||
+        "Gagal menyimpan absensi"
+      );
+
+    }
+
+
+  }
+
+  catch (error) {
+
+
+    console.error(error);
+
+
+    document.getElementById("hasil")
+      .innerHTML = `
+
+        <div class="status error">
+
+          ❌ Gagal mengirim absensi.
+
+          <br><br>
+
+          ${error.message}
+
+        </div>
+
+      `;
+
+
+    btn.disabled = false;
+
+    btn.innerText =
+      "✅ KIRIM ABSENSI";
+
+  }
+
+}
+
 
 </script>
 
 </body>
+
 </html>
