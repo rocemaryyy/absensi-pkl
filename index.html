@@ -374,7 +374,6 @@ function ambilFoto() {
 
   alert("Foto berhasil diambil!");
 
-
 }
 
 
@@ -446,8 +445,7 @@ function ambilLokasi() {
 // KIRIM ABSENSI
 // ==========================================
 
-async function kirimAbsensi() {
-
+function kirimAbsensi() {
 
   const nama =
     document.getElementById("nama")
@@ -460,7 +458,7 @@ async function kirimAbsensi() {
 
 
   // ----------------------------------------
-  // Validasi
+  // VALIDASI
   // ----------------------------------------
 
   if (!nama) {
@@ -500,7 +498,7 @@ async function kirimAbsensi() {
 
 
   // ----------------------------------------
-  // Tombol loading
+  // TOMBOL LOADING
   // ----------------------------------------
 
   const btn =
@@ -514,159 +512,217 @@ async function kirimAbsensi() {
 
 
   // ----------------------------------------
-  // Data yang dikirim
+  // BUAT FORM TERSEMBUNYI
   // ----------------------------------------
 
-  const data = {
+  const form =
+    document.createElement("form");
 
-    nama: nama,
+  form.method = "POST";
 
-    kelas: kelas,
+  form.action =
+    APPS_SCRIPT_URL;
 
-    latitude: latitude,
-
-    longitude: longitude,
-
-    foto: fotoBase64
-
-  };
+  form.target =
+    "absensiFrame";
 
 
-  try {
+  // ----------------------------------------
+  // DATA
+  // ----------------------------------------
+
+  tambahInput(
+    form,
+    "nama",
+    nama
+  );
+
+  tambahInput(
+    form,
+    "kelas",
+    kelas
+  );
+
+  tambahInput(
+    form,
+    "latitude",
+    latitude
+  );
+
+  tambahInput(
+    form,
+    "longitude",
+    longitude
+  );
+
+  tambahInput(
+    form,
+    "foto",
+    fotoBase64
+  );
 
 
-    const response =
-      await fetch(
+  // ----------------------------------------
+  // MASUKKAN FORM KE HALAMAN
+  // ----------------------------------------
 
-        APPS_SCRIPT_URL,
+  document.body.appendChild(form);
 
-        {
 
-          method: "POST",
+  // ----------------------------------------
+  // KIRIM
+  // ----------------------------------------
 
-          headers: {
+  form.submit();
 
-            "Content-Type":
-              "text/plain;charset=utf-8"
 
-          },
+  // ----------------------------------------
+  // Hapus form
+  // ----------------------------------------
 
-          body:
-            JSON.stringify(data)
+  setTimeout(function() {
 
-        }
+    form.remove();
 
+  }, 3000);
+
+
+  // ----------------------------------------
+  // TAMPILKAN STATUS
+  // ----------------------------------------
+
+  document.getElementById("hasil")
+    .innerHTML = `
+
+      <div class="status success">
+
+        ⏳ ABSENSI SEDANG DIKIRIM...
+
+        <br><br>
+
+        Nama: ${nama}
+
+        <br>
+
+        Kelas: ${kelas}
+
+        <br>
+
+        📍 Lokasi sedang disimpan
+
+        <br>
+
+        📷 Foto sedang disimpan
+
+      </div>
+
+    `;
+
+
+  btn.innerText =
+    "⏳ ABSENSI DIKIRIM";
+
+
+  // ----------------------------------------
+  // Matikan kamera
+  // ----------------------------------------
+
+  if (stream) {
+
+    stream
+      .getTracks()
+      .forEach(
+        track => track.stop()
       );
-
-
-    const hasil =
-      await response.json();
-
-
-    console.log(hasil);
-
-
-    // --------------------------------------
-    // Jika berhasil
-    // --------------------------------------
-
-    if (
-      hasil.status === "success"
-    ) {
-
-
-      document.getElementById("hasil")
-        .innerHTML = `
-
-          <div class="status success">
-
-            ✅ ABSENSI BERHASIL!
-
-            <br><br>
-
-            Nama: ${nama}
-
-            <br>
-
-            Kelas: ${kelas}
-
-            <br>
-
-            📍 Lokasi berhasil disimpan
-
-            <br>
-
-            📷 Foto berhasil disimpan
-
-          </div>
-
-        `;
-
-
-      btn.innerText =
-        "✅ ABSENSI TERKIRIM";
-
-
-      // Matikan kamera
-
-      if (stream) {
-
-        stream
-          .getTracks()
-          .forEach(
-            track => track.stop()
-          );
-
-      }
-
-
-    }
-
-    else {
-
-      throw new Error(
-        hasil.message ||
-        "Gagal menyimpan absensi"
-      );
-
-    }
-
 
   }
 
-  catch (error) {
 
+  // ----------------------------------------
+  // Beri waktu server memproses
+  // ----------------------------------------
 
-    console.error(error);
-
+  setTimeout(function() {
 
     document.getElementById("hasil")
       .innerHTML = `
 
-        <div class="status error">
+        <div class="status success">
 
-          ❌ Gagal mengirim absensi.
+          ✅ ABSENSI TERKIRIM!
 
           <br><br>
 
-          ${error.message}
+          Nama: ${nama}
+
+          <br>
+
+          Kelas: ${kelas}
+
+          <br>
+
+          📍 Lokasi dikirim
+
+          <br>
+
+          📷 Foto dikirim
 
         </div>
 
       `;
 
-
-    btn.disabled = false;
-
     btn.innerText =
-      "✅ KIRIM ABSENSI";
+      "✅ ABSENSI TERKIRIM";
 
-  }
+  }, 4000);
 
 }
 
 
+// ==========================================
+// MEMBUAT INPUT FORM
+// ==========================================
+
+function tambahInput(
+  form,
+  nama,
+  nilai
+) {
+
+  const input =
+    document.createElement("input");
+
+  input.type =
+    "hidden";
+
+  input.name =
+    nama;
+
+  input.value =
+    nilai;
+
+  form.appendChild(input);
+
+}
+
+
+// ==========================================
+// FRAME TERSEMBUNYI
+// ==========================================
+
 </script>
+
+
+<iframe
+  name="absensiFrame"
+  style="
+    display:none;
+    width:0;
+    height:0;
+    border:0;
+  "
+></iframe>
+
 
 </body>
 
